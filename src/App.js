@@ -1,25 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Game } from './Components/ScoreCard/Game';
+import { useState } from 'react';
+import { Form, Input } from 'reactstrap';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const App = () => {
+const [totalOvers, setTotalOvers] = useState(0);
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  setTotalOvers(parseInt(e.target.totalOver.value));
+  console.log(totalOvers);
 }
 
-export default App;
+return (
+  <div className="App">
+{totalOvers === 0 ? (
+        <>
+          <Form onSubmit={handleSubmit}>
+            <h1>Enter number of overs</h1>
+            <Input type="number" defaultValue={0} name="totalOver" />
+            <Input type="submit" value="Submit" />
+          </Form>
+        </>
+      ) : (
+        <Game totalOvers={totalOvers} />
+      )}
+  </div>
+)
+
+};
+export default  App;
