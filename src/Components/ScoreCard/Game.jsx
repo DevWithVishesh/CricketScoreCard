@@ -41,13 +41,13 @@ export const Game = ({ totalOvers }) => {
     }
     if (currentTeam === 2) {
       if (team2.score > team1.score) {
-        alert("Team 2 won the match");
+        alert("Team 2 won the match by " + (10 - team2.wickets) + " wickets");
       }
       if (team2.wickets === 10) {
-        alert("Team 1 won the match");
+        alert("Team 1 won the match by " + (team2.score - team1.score) + " runs");
       }
       if (totalOvers === overs && team1.score > team2.score) {
-        alert("Team 1 won the match");
+        alert("Team 1 won the match by " + (team1.score - team2.score) + " runs");
       }
       if (totalOvers === overs && team2.score === team1.score) {
         alert("Match is drawn");

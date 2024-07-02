@@ -18,8 +18,7 @@ return (
   <div className="App">
 {totalOvers === 0 ? (
         <>
-          <Form onSubmit={handleSubmit}>
-            <h1>Enter number of overs</h1>
+          <Form onSubmit={handleSubmit}>            <h1>Enter number of overs</h1>                                                                            
             <Input type="number" defaultValue={0} name="totalOver" />
             <Input type="submit" value="Submit" />
           </Form>

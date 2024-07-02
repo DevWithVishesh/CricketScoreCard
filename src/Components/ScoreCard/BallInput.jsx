@@ -9,6 +9,8 @@ export const BallInput = ({ onAddBall }) => {
     const handleSubmit = (e) => {
       e.preventDefault();
       const runsInt = parseInt(runs);
+      if(runsInt>6 || runsInt<0){alert("Enter valid runs")}
+      else{
       if (!isNaN(runsInt) || isNoBall || isWide || isWicket) {
         onAddBall(runsInt, isNoBall, isWide, isWicket);
         setRuns('');
@@ -16,6 +18,7 @@ export const BallInput = ({ onAddBall }) => {
         setIsWide(false);
         setIsWicket(false);
       }
+    }
     };
   
     return (
@@ -24,6 +27,7 @@ export const BallInput = ({ onAddBall }) => {
           type="number"
           value={runs}
           max={6}
+          min={0}
           onChange={(e) => setRuns(e.target.value?e.target.value:0)}
           placeholder="Enter runs for the ball"
           disabled={isNoBall || isWide || isWicket}
