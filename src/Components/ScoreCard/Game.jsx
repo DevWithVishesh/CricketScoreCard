@@ -68,16 +68,13 @@ export const Game = ({ totalOvers }) => {
       }
     }
     if (overs === totalOvers || team1.wickets === 10) {
-      switchTeams();
+      if (currentTeam === 1) {
+        setCurrentTeam(2);
+        setOvers(0);
+        setCurrentBall(0);
+      }
     }
-  });
-  const switchTeams = () => {
-    if (currentTeam === 1) {
-      setCurrentTeam(2);
-      setOvers(0);
-      setCurrentBall(0);
-    }
-  };
+  },[currentBall, currentTeam, overs, team1, team2, totalballs, totalOvers]);
 
   return (
     <div>
