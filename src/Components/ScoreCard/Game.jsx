@@ -52,7 +52,7 @@ export const Game = ({ totalOvers }) => {
       }
       if (team2.wickets === 10) {
         setMatchOverMessage(
-          "Team 1 won the match by " + (team2.score - team1.score) + " runs"
+          "Team 1 won the match by " + (team1.score - team2.score) + " runs"
         );
         setIsMatchOver(true);
       }
