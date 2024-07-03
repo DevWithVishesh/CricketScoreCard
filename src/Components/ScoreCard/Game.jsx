@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TeamScorecard } from "../TeamScore";
 import { BallInput } from "./BallInput";
 import { ScoreSummary } from "./ScoreSummary";
+import { Paper } from "@mui/material";
 
 export const Game = ({ totalOvers }) => {
   const [team1, setTeam1] = useState({ score: 0, balls: [], wickets: 0 });
@@ -9,7 +10,9 @@ export const Game = ({ totalOvers }) => {
   const [currentTeam, setCurrentTeam] = useState(1);
   const [overs, setOvers] = useState(0);
   const [currentBall, setCurrentBall] = useState(0);
-
+  const [isMatchOver, setIsMatchOver] = useState(false);
+  const [matchOverMessage, setMatchOverMessage] = useState("");
+  const totalballs = totalOvers * 6;
   const handleAddBall = (runs, isNoBall, isWide, isWicket) => {
     if (isNaN(runs)) {
       runs = 0;
@@ -36,28 +39,44 @@ export const Game = ({ totalOvers }) => {
     }
   };
   useEffect(() => {
+    if (currentTeam === 2) {
+      if (team2.score > team1.score) {
+        setMatchOverMessage(
+          "Team 2 won the match by " +
+            (10 - team2.wickets) +
+            " wickets " +
+            (totalballs - (overs * 6 + currentBall)) +
+            " Balls Left"
+        );
+        setIsMatchOver(true);
+      }
+      if (team2.wickets === 10) {
+        setMatchOverMessage(
+          "Team 1 won the match by " + (team2.score - team1.score) + " runs"
+        );
+        setIsMatchOver(true);
+      }
+      if (totalOvers === overs && team1.score > team2.score) {
+        setMatchOverMessage(
+          "Team 1 won the match by " + (team1.score - team2.score) + " runs"
+        );
+        setIsMatchOver(true);
+      }
+      if (totalOvers === overs && team2.score === team1.score) {
+        setMatchOverMessage("Match is drawn");
+        setIsMatchOver(true);
+      }
+    }
     if (overs === totalOvers || team1.wickets === 10) {
       switchTeams();
     }
-    if (currentTeam === 2) {
-      if (team2.score > team1.score) {
-        alert("Team 2 won the match by " + (10 - team2.wickets) + " wickets");
-      }
-      if (team2.wickets === 10) {
-        alert("Team 1 won the match by " + (team2.score - team1.score) + " runs");
-      }
-      if (totalOvers === overs && team1.score > team2.score) {
-        alert("Team 1 won the match by " + (team1.score - team2.score) + " runs");
-      }
-      if (totalOvers === overs && team2.score === team1.score) {
-        alert("Match is drawn");
-      }
-    }
   });
   const switchTeams = () => {
-    setCurrentTeam(2);
-    setOvers(0);
-    setCurrentBall(0);
+    if (currentTeam === 1) {
+      setCurrentTeam(2);
+      setOvers(0);
+      setCurrentBall(0);
+    }
   };
 
   return (
@@ -65,11 +84,29 @@ export const Game = ({ totalOvers }) => {
       <h1>Cricket Scorecard</h1>
       <TeamScorecard team={1} score={team1.score} wickets={team1.wickets} />
       <TeamScorecard team={2} score={team2.score} wickets={team2.wickets} />
-      <BallInput onAddBall={handleAddBall} />
-      <ScoreSummary balls={currentTeam === 1 ? team1.balls : team2.balls} />
-      <h2>
-        Overs: {overs}.{currentBall}
-      </h2>
+      {!isMatchOver ? (
+        <>
+          <BallInput onAddBall={handleAddBall} />
+          <h2>
+            Overs: {overs}.{currentBall}
+          </h2>
+          <ScoreSummary balls={currentTeam === 1 ? team1.balls : team2.balls} />
+        </>
+      ) : (
+        <>
+          <h2>{matchOverMessage}</h2>
+          <div className="d-flex gap-4">
+            <Paper elevation={3} className="w-50">
+              <h2>Team 1</h2>
+              <ScoreSummary balls={team1.balls} />
+            </Paper>
+            <Paper elevation={3} className="w-50">
+              <h2>Team 2</h2>
+              <ScoreSummary balls={team2.balls} />
+            </Paper>
+          </div>
+        </>
+      )}
     </div>
   );
 };
